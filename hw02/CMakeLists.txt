@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.5)
+project(hw02 LANGUAGES CXX)
+add_executable(${PROJECT_NAME} hw02.cpp)
+find_package(Catch2)
+target_link_libraries(${PROJECT_NAME} Catch2::Catch2WithMain)
