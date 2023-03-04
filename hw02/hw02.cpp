@@ -23,7 +23,7 @@ std::vector<char> hw02_test(std::vector<int> ascii) {
 }
 
 struct Blob{
-  char data[27];
+  char data[26];
 };
 
 
