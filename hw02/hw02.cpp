@@ -1,5 +1,7 @@
 #include <catch2/catch_test_macros.hpp>
 #include <algorithm>
+#include <fstream>
+#include <iostream>
 
 #include <vector>
 
@@ -20,7 +22,24 @@ std::vector<char> hw02_test(std::vector<int> ascii) {
   return letters;
 }
 
+struct Blob{
+  char data[27];
+};
+
+
 void hw02_complex_test() {
+  
+  Blob blob;
+
+  std::ifstream fs_rd("hw02_data.bin", std::ios::in | std::ios::binary);
+  fs_rd.read(reinterpret_cast<char*>(&blob), sizeof(blob));
+  fs_rd.close();
+  
+
+  for(const auto& item: blob.data){
+    std::cout << item << "";
+  }
+
   // Код домашнего задания (*)
   // Интерпретация блоб в виде структуры (10 баллов)
   // На вход подается бинарный файл (блоб)
@@ -31,6 +50,11 @@ void hw02_complex_test() {
   //  d. вывести данные на консоль
   //  e. написать небольшой отчет по исследованию и реализации
 }
+
+
+
+
+
 
 TEST_CASE("hw02_1", "[test]") {
   REQUIRE(hw02_test(std::vector<int>{68, 69, 70}) == std::vector<char>{'F', 'E', 'D'});
