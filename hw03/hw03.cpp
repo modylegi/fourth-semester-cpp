@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 
 // Код домашнего задания
@@ -79,21 +80,21 @@ void do_fs(const std::string &filename) {
     if (blob.version > 0 && blob.version < 8) {
       std::cout << "Version is correct"  << std::endl;
     } else {
-      throw VersionException("валидные значения [1-7]");
+      throw VersionException("валидные значения [1-7], получено" + std::to_string(blob.version));
     }
     
     std::uint32_t compareSize = 12;
     if(std::memcmp(bytes.data() + 2, reinterpret_cast<char *>(&compareSize), sizeof(blob.size)) == 0){
       std::cout << "Size is correct" << std::endl;
     } else {
-      throw SizeException("валидное значение 12 (0xC)");
+      throw SizeException("валидное значение 12 (0xC), получено  " + std::to_string(blob.size));
     }
 
     const char* compareData = "Hello, World";
     if (std::memcmp(bytes.data() + 6, compareData, sizeof(blob.data)) == 0) {
       std::cout << "Data is correct" << std::endl;
     } else {
-      std::cout << "валидное значение 'Hello, World' (12 байт без нуль-терминатора)" << std::endl;
+      throw DataException("валидное значение 'Hello, World' (12 байт без нуль-терминатора), получено  " +  (std::string)blob.data);
     }
   }
 }
