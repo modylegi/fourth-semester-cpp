@@ -127,10 +127,8 @@ void hw04(std::string rulesFilePath, std::string filesDirPath){
 
   for(auto i: fs::directory_iterator(filesDirPath)){
     if(fs::is_directory(i)){
-      // std::cout << i.path().filename().string() << "\n";
       if(std::find(dirs.begin(), dirs.end(), i.path().filename().string()) != dirs.end()){
       } else {
-        std::cout << i << "\n";
         fs::remove(i);
       } 
     }
