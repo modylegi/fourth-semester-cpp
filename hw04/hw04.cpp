@@ -193,10 +193,13 @@ void hw04(std::string rulesFilePath, std::string filesDirPath){
 int main(int argc, char** argv){
   
   // if(!fs::exists("rules.txt")){
-  //   createRulesFile();
+  //   std::string pathRules = createRulesFile();
+  //   std::cout << "path to rules: " << pathRules << "\n";
+
   // }
   // if(!fs::exists("input_folder")){
-  //   createFilesDir();
+  //   std::string pathDir = createFilesDir();
+  //   std::cout << "path to input folder: " << pathDir << "\n";
   // }
   // Если нету файлов.
   
