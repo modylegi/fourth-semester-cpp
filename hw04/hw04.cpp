@@ -59,79 +59,84 @@ std::string createFilesDir(){
   }
 
   return fs::absolute(input_folder).string();
+  
 }
 
 
 
 void hw04(std::string rulesFilePath, std::string filesDirPath){
-  std::vector<std::string> dirs;
-  std::vector<std::string> exts;
-  std::ifstream rulesFile(rulesFilePath);
-  std::string line;
-  while (std::getline(rulesFile, line)) {
-    std::istringstream ss(line);
-    std::string dirName;
-    std::string extName;
-    std::getline(ss, extName,':');
-    std::getline(ss, dirName);
-    if (std::find(dirs.begin(), dirs.end(), dirName) == dirs.end()) {
-        dirs.push_back(dirName);
+  try{
+    std::vector<std::string> dirs;
+    std::vector<std::string> exts;
+    std::ifstream rulesFile(rulesFilePath);
+    std::string line;
+    while (std::getline(rulesFile, line)) {
+      std::istringstream ss(line);
+      std::string dirName;
+      std::string extName;
+      std::getline(ss, extName,':');
+      std::getline(ss, dirName);
+      if (std::find(dirs.begin(), dirs.end(), dirName) == dirs.end()) {
+          dirs.push_back(dirName);
+      }
+      if (std::find(exts.begin(), exts.end(), extName) == exts.end()) {
+          exts.push_back(extName);
+      }
     }
-    if (std::find(exts.begin(), exts.end(), extName) == exts.end()) {
-        exts.push_back(extName);
-    }
-  }
 
-  dirs.push_back("Other");
-  for(auto i:dirs){
-    fs::create_directory(filesDirPath + "/" + i);
-  }
-  
-  std::vector<fs::path> files;
-  for(auto i: fs::recursive_directory_iterator(filesDirPath)){
-    if(fs::is_regular_file(i)){
-      files.push_back(i);
+    dirs.push_back("Other");
+    for(auto i:dirs){
+      fs::create_directory(filesDirPath + "/" + i);
     }
-  }
-  
+    
+    std::vector<fs::path> files;
+    for(auto i: fs::recursive_directory_iterator(filesDirPath)){
+      if(fs::is_regular_file(i)){
+        files.push_back(i);
+      }
+    }
+    
 
-  for(auto i: files){
-    std::string extension = i.extension().string();
-    std::string clearExtension = extension.erase(0,1);
-    if(std::find(exts.begin(), exts.end(), clearExtension) != exts.end()){
-    }else{
-      fs::path oldPath("input_folder/"+i.parent_path().filename().string()+ "/" + i.filename().string());
-      fs::path newPath("input_folder/Other/" + i.filename().string());
-      fs::copy_file(oldPath, newPath);
-      fs::remove(oldPath);
-    }
-    if(clearExtension == "txt" || clearExtension == "docx"){
-      fs::path oldPath("input_folder/"+i.parent_path().filename().string()+ "/" + i.filename().string());
-      fs::path newPath("input_folder/Docs/" + i.filename().string());
-      fs::copy_file(oldPath, newPath);
-      fs::remove(oldPath);
-    } 
-    if(clearExtension ==  "mp3"){
-      fs::path oldPath("input_folder/"+i.parent_path().filename().string()+ "/" + i.filename().string());
-      fs::path newPath("input_folder/Music/" + i.filename().string());
-      fs::copy_file(oldPath, newPath);
-      fs::remove(oldPath);
-    }
-    if(clearExtension ==  "png" || clearExtension ==  "jpg"){
-      fs::path oldPath("input_folder/"+i.parent_path().filename().string()+ "/" + i.filename().string());
-      fs::path newPath("input_folder/Images/" + i.filename().string());
-      fs::copy_file(oldPath, newPath);
-      fs::remove(oldPath);
-    }
-  }
-
-  for(auto i: fs::directory_iterator(filesDirPath)){
-    if(fs::is_directory(i)){
-      if(std::find(dirs.begin(), dirs.end(), i.path().filename().string()) != dirs.end()){
-      } else {
-        fs::remove(i);
+    for(auto& i: files){
+      std::string extension = i.extension().string();
+      std::string clearExtension = extension.erase(0,1);
+      if(std::find(exts.begin(), exts.end(), clearExtension) != exts.end()){
+      }else{
+        fs::path oldPath("input_folder/"+i.parent_path().filename().string()+ "/" + i.filename().string());
+        fs::path newPath("input_folder/Other/" + i.filename().string());
+        fs::copy_file(oldPath, newPath);
+        fs::remove(oldPath);
+      }
+      if(clearExtension == "txt" || clearExtension == "docx"){
+        fs::path oldPath("input_folder/"+i.parent_path().filename().string()+ "/" + i.filename().string());
+        fs::path newPath("input_folder/Docs/" + i.filename().string());
+        fs::copy_file(oldPath, newPath);
+        fs::remove(oldPath);
       } 
+      if(clearExtension ==  "mp3"){
+        fs::path oldPath("input_folder/"+i.parent_path().filename().string()+ "/" + i.filename().string());
+        fs::path newPath("input_folder/Music/" + i.filename().string());
+        fs::copy_file(oldPath, newPath);
+        fs::remove(oldPath);
+      }
+      if(clearExtension ==  "png" || clearExtension ==  "jpg"){
+        fs::path oldPath("input_folder/"+i.parent_path().filename().string()+ "/" + i.filename().string());
+        fs::path newPath("input_folder/Images/" + i.filename().string());
+        fs::copy_file(oldPath, newPath);
+        fs::remove(oldPath);
+      }
     }
+
+    for(auto i: fs::directory_iterator(filesDirPath)){
+      if(fs::is_directory(i)){
+        if(std::find(dirs.begin(), dirs.end(), i.path().filename().string()) != dirs.end()){
+        } else {
+          fs::remove(i);
+        } 
+      }
+    }
+  } catch (const fs::filesystem_error& e) {
+    std::cerr << "Error: " << "Data is already structured!\n" << e.what() << std::endl;
   }
 }
 
@@ -186,8 +191,36 @@ void hw04(std::string rulesFilePath, std::string filesDirPath){
     // - Содержимое файлов не важно
     // - Вложенные директории с файлами
 int main(int argc, char** argv){
-  std::string rulesFilePath = createRulesFile();
-  std::string filesDirPath = createFilesDir();
-  hw04(rulesFilePath, filesDirPath);
+  if(!fs::exists("rules.txt")){
+    createRulesFile();
+  }
+  if(!fs::exists("input_folder")){
+    createFilesDir();
+  }
+  
+  
+  po::options_description desc("Allowed options");
+    desc.add_options()
+        ("input-folder,i", po::value<fs::path>(), "path to input folder")
+        ("rules-file,r", po::value<fs::path>(), "path to rules file")
+    ;
+
+    po::positional_options_description p;
+    p.add("input-folder", 1);
+    p.add("rules-file", 1);
+
+    po::variables_map vm;
+    po::store(po::command_line_parser(argc, argv).options(desc).positional(p).run(), vm);
+    po::notify(vm);
+
+    if (vm.count("input-folder") && vm.count("rules-file")) {
+        fs::path inputFolder = vm["input-folder"].as<fs::path>();
+        fs::path rulesFile = vm["rules-file"].as<fs::path>();
+        hw04(rulesFile.string(), inputFolder.string());
+    } else {
+        std::cout << "Usage: hw04 -r <path to rules> -i <path to input folder>" << std::endl;
+    }
+
+    
   return 0;
 }
