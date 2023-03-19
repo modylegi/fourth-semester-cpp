@@ -192,8 +192,12 @@ void hw04(std::string rulesFilePath, std::string filesDirPath){
     // - Вложенные директории с файлами
 int main(int argc, char** argv){
   
-  // createRulesFile();
-  // createFilesDir();
+  // if(!fs::exists("rules.txt")){
+  //   createRulesFile();
+  // }
+  // if(!fs::exists("input_folder")){
+  //   createFilesDir();
+  // }
   // Если нету файлов.
   
   
