@@ -57,10 +57,14 @@ public:
             std::istream is(&con_handle->read_buffer);
             std::string line;
             std::getline(is, line);
+            std::size_t tilde_pos = line.find("~");
+            if (tilde_pos != std::string::npos) {
+                std::string home_dir = boost::filesystem::path(getenv("HOME")).string();
+                line.replace(tilde_pos, 1, home_dir);
+            }
             boost::algorithm::trim(line);
             std::vector<std::string> args;
             boost::split(args, line, boost::is_any_of(" "), boost::token_compress_on);
-
             if (args[0] == "username") {
                 auto username = boost::asio::ip::host_name();
                 send_response(con_handle, username );
