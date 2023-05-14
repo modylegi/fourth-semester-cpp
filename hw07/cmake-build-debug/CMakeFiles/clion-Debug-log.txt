@@ -1,0 +1,5 @@
+"/Users/admin/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/231.8770.66/CLion.app/Contents/bin/cmake/mac/bin/cmake" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=/Users/admin/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/231.8770.66/CLion.app/Contents/bin/ninja/mac/ninja" -G Ninja -S /Users/admin/Desktop/hw07 -B /Users/admin/Desktop/hw07/cmake-build-debug
+-- Found Boost: /opt/homebrew/lib/cmake/Boost-1.81.0/BoostConfig.cmake (found version "1.81.0") found components: filesystem 
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /Users/admin/Desktop/hw07/cmake-build-debug
